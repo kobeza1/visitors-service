@@ -12,17 +12,18 @@ const App = () => {
   const [add, setAdd] = useState(false);
   const [edit, setEdit] = useState(false);
 
+  const fetchFunction = async () => {
+    const fetch = await fetchVisitors();
+    setVisitors(fetch);
+  };
+
   useEffect(() => {
     try {
-      fetchVisitors().then((res) => {
-        setVisitors(res);
-        // console.log(`res.data`, res);
-        // console.log(`visitors`, visitors);
-      });
+      fetchFunction();
     } catch (error) {
       console.log(error);
     }
-  }, [visitors]);
+  }, []);
 
   const handleDelete = (id) => {
     console.log(visitors.filter((items) => items.userId !== id));
@@ -36,16 +37,32 @@ const App = () => {
     setEdit(!edit);
   };
 
+  const handleSort = (newArray) => {
+    setVisitors([...newArray]);
+    // console.log(newArray);
+  };
+
   const sendData = (data) => {
-    const { name } = data;
-    const newVisitor = { userId: nanoid(), name: name };
+    const { name, surname } = data;
+    const time = new Date();
+    const now = time.toLocaleString();
+    console.log(time);
+    console.log(now);
+    const newVisitor = {
+      userId: nanoid(),
+      name: name,
+      lastName: surname,
+      time: now,
+    };
     addVisitor(newVisitor);
+    setVisitors([...visitors, newVisitor]);
   };
 
   return (
     <Container>
       <Table
         visitors={visitors}
+        handleSort={handleSort}
         handleDelete={handleDelete}
         handleClick={handleEditClose}
         show={edit}

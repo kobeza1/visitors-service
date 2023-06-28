@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "https://pugm4qyzcj.execute-api.us-east-1.amazonaws.com";
+const BASE_URL = "https://czlfqe0t6k.execute-api.us-east-1.amazonaws.com";
 // const KEY = "724fbc146559c3ae1940072aea85abed";
 let path = "";
 
