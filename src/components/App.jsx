@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { addVisitor, fetchVisitors } from "../utils/api-service";
+import {
+  addVisitor,
+  deleteVisitor,
+  fetchVisitors,
+  updateVisitor,
+} from "../utils/api-service";
 import { AddButton } from "./AddButton/AddButton";
 import { ModalComponent } from "./Modal/Modal";
 import { Table } from "./Table/Table";
@@ -11,6 +16,7 @@ const App = () => {
   const [visitors, setVisitors] = useState([]);
   const [add, setAdd] = useState(false);
   const [edit, setEdit] = useState(false);
+  const [current, setCurrent] = useState({});
 
   const fetchFunction = async () => {
     const fetch = await fetchVisitors();
@@ -25,8 +31,10 @@ const App = () => {
     }
   }, []);
 
-  const handleDelete = (id) => {
-    console.log(visitors.filter((items) => items.userId !== id));
+  const handleDelete = (ID) => {
+    const newArray = visitors.filter((items) => items.ID !== ID);
+    deleteVisitor(ID);
+    setVisitors(newArray);
   };
 
   const handleClose = () => {
@@ -37,25 +45,40 @@ const App = () => {
     setEdit(!edit);
   };
 
+  const handleClick = (object) => {
+    setCurrent(object);
+    handleEditClose();
+  };
+
   const handleSort = (newArray) => {
     setVisitors([...newArray]);
-    // console.log(newArray);
   };
 
   const sendData = (data) => {
     const { name, surname } = data;
-    const time = new Date();
-    const now = time.toLocaleString();
-    console.log(time);
-    console.log(now);
+    const time = new Date().toLocaleString();
     const newVisitor = {
-      userId: nanoid(),
+      ID: nanoid(),
       name: name,
       lastName: surname,
-      time: now,
+      createDate: time,
     };
     addVisitor(newVisitor);
     setVisitors([...visitors, newVisitor]);
+  };
+
+  const handleEdit = async (data) => {
+    const { name, surname } = data;
+    const { ID, createDate } = current;
+    const newArray = visitors.filter((items) => items.ID !== ID);
+
+    const update = {
+      name: name,
+      lastName: surname,
+    };
+    updateVisitor(ID, update);
+
+    setVisitors([{ ID, createDate, ...update }, ...newArray]);
   };
 
   return (
@@ -64,7 +87,7 @@ const App = () => {
         visitors={visitors}
         handleSort={handleSort}
         handleDelete={handleDelete}
-        handleClick={handleEditClose}
+        handleClick={handleClick}
         show={edit}
       />
       <AddButton handleClick={handleClose} />
@@ -73,6 +96,7 @@ const App = () => {
           type={"edit"}
           sendData={sendData}
           handleClose={handleEditClose}
+          handleEdit={handleEdit}
         />
       </ModalComponent>
       <ModalComponent handleClose={handleClose} show={add}>

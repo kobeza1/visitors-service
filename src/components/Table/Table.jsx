@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { deleteVisitor } from "../../utils/api-service";
 import css from "./Table.module.css";
 
-export const Table = ({ visitors, handleClick, handleSort }) => {
+export const Table = ({ visitors, handleClick, handleSort, handleDelete }) => {
   const [sort, setSort] = useState(true);
 
   const sortFunction = (type) => {
@@ -23,22 +22,25 @@ export const Table = ({ visitors, handleClick, handleSort }) => {
             : b.lastName.localeCompare(a.lastName)
         );
         handleSort(byLastName);
+
         break;
 
-      case "userId":
+      case "ID":
         const byUserId = visitors.sort((a, b) =>
-          sort
-            ? a.userId.localeCompare(b.userId)
-            : b.userId.localeCompare(a.userId)
+          sort ? a.ID.localeCompare(b.ID) : b.ID.localeCompare(a.ID)
         );
         handleSort(byUserId);
+
         break;
 
-      case "time":
+      case "createDate":
         const byTime = visitors.sort((a, b) =>
-          sort ? a.time.localeCompare(b.time) : b.time.localeCompare(a.time)
+          sort
+            ? a.time.localeCompare(b.createDate)
+            : b.time.localeCompare(a.createDate)
         );
         handleSort(byTime);
+
         break;
 
       default:
@@ -52,7 +54,7 @@ export const Table = ({ visitors, handleClick, handleSort }) => {
           <th
             scope="col"
             className={css.table__header}
-            onClick={() => sortFunction("userId")}
+            onClick={() => sortFunction("ID")}
           >
             ID
           </th>
@@ -73,27 +75,27 @@ export const Table = ({ visitors, handleClick, handleSort }) => {
           <th
             scope="col"
             className={css.table__header}
-            onClick={() => sortFunction("time")}
+            onClick={() => sortFunction("createDate")}
           >
-            Time
+            Date created
           </th>
           <th scope="col" className={css.table__header}></th>
         </tr>
       </thead>
       <tbody>
         {visitors.map((items) => (
-          <tr className="table-dark" key={items.userId}>
-            <th scope="row">{items.userId}</th>
+          <tr className="table-dark" key={items.ID}>
+            <th scope="row">{items.ID}</th>
             <td className="table-dark">{items.name}</td>
             <td className="table-dark">{items.lastName}</td>
-            <td className="table-dark">{items.time}</td>
+            <td className="table-dark">{items.createDate}</td>
             <td className="table-dark">
               <ul className={css.table__btns_list}>
                 <li className={css.table__btns_item}>
                   <button
                     type="button"
                     className="btn btn-light"
-                    onClick={() => handleClick()}
+                    onClick={() => handleClick(items)}
                   >
                     Edit
                   </button>
@@ -102,7 +104,7 @@ export const Table = ({ visitors, handleClick, handleSort }) => {
                   <button
                     type="button"
                     className="btn btn-light"
-                    onClick={() => deleteVisitor(items.userId)}
+                    onClick={() => handleDelete(items.ID)}
                   >
                     Delete
                   </button>

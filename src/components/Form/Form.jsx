@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 
-export const FormComponent = ({ type, sendData, handleClose }) => {
+export const FormComponent = ({ type, sendData, handleEdit, handleClose }) => {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [validated, setValidated] = useState(false);
@@ -14,7 +14,8 @@ export const FormComponent = ({ type, sendData, handleClose }) => {
     if (form.checkValidity()) {
       const data = { name, surname };
       if (type === "edit") {
-        console.log("handleEdit");
+        handleEdit(data);
+        handleClose();
       } else {
         sendData(data);
         handleClose();
