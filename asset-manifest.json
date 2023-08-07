@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/visitors-service/static/css/main.2e8eb21d.css",
+    "main.js": "/visitors-service/static/js/main.fa49a3e9.js",
+    "index.html": "/visitors-service/index.html",
+    "main.2e8eb21d.css.map": "/visitors-service/static/css/main.2e8eb21d.css.map",
+    "main.fa49a3e9.js.map": "/visitors-service/static/js/main.fa49a3e9.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2e8eb21d.css",
+    "static/js/main.fa49a3e9.js"
+  ]
+}
